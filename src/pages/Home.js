@@ -6,6 +6,7 @@ import "./styles/Home.scss";
 import Menu from "../components/Global/Menu";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
+import VideoGames from "../components/VideoGames";
 
 class Home extends Component {
   constructor(props) {
@@ -13,7 +14,7 @@ class Home extends Component {
     this.state = {
       loading: false,
       error: null,
-      videoGamesList: {}
+      videoGamesList: []
     };
   }
 
@@ -22,7 +23,10 @@ class Home extends Component {
     axios
       .get("https://api.rawg.io/api/games")
       .then(response => {
-        this.setState({ loading: false, videoGamesList: response.data });
+        this.setState({
+          loading: false,
+          videoGamesList: response.data.results
+        });
       })
       .catch(error => {
         this.setState({ loading: false, error: error.message });
@@ -39,7 +43,9 @@ class Home extends Component {
         <Fragment>
           <div className="home__content">
             <div className="sidebar"></div>
-            <main></main>
+            <main>
+              <VideoGames videoGamesList={this.state.videoGamesList} />
+            </main>
           </div>
         </Fragment>
       );
